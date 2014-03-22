@@ -45,21 +45,30 @@ app.get('/classes/messages', function(request,response) {
       // CODE ROB ADDED IN
       var dataObj = {};
       dataObj.results = data;
-      console.log('++++++Sending data ', dataObj);
+      console.log('++++++Sending data ');
       response.send(dataObj);
     }
   });
 });
 
 app.post('/classes/messages', function(request,response) {
-  console.log(request.body);
-  dbConnection.query('INSERT INTO messages', request.body, function(err, result) {
-    if (err) { console.log('----Error inserting into messages'); }
-    else {
-      console.log('------Inserting into messages', result);
-      response.end();
-    }
-  });
+  var clientData = request.body;
+    var dataObj = {
+      body: clientData.text,
+      username: clientData.username,
+      send_time: clientData.createdAt,
+      roomname: clientData.roomname
+    };
+    console.log('**********TRYING TO INSERT******');
+    dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
+      if (err) {
+        console.log('----Error inserting into messages----', err);
+      }
+      else {
+        console.log('------Inserting into messages');
+        response.end();
+      }
+    });
 });
 
 app.get('/classes/room', function(request,response) {
@@ -70,7 +79,7 @@ app.get('/classes/room', function(request,response) {
       // CODE ROB ADDED IN
       var dataObj = {};
       dataObj.results = data;
-      console.log('++++++Sending data ', dataObj);
+      console.log('++++++Sending data ');
       response.send(dataObj);
     }
   });
@@ -84,15 +93,12 @@ app.post('/classes/room', function(request,response) {
     send_time: clientData.createdAt,
     roomname: clientData.roomname
   };
-  console.log('**********TRYING TO INSERT******');
-  console.log(dataObj);
   dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
     if (err) {
       console.log('----Error inserting into messages----', err);
-      console.log('INSERT INTO messages', dataObj);
     }
     else {
-      console.log('------Inserting into messages', result);
+      console.log('------Inserting into messages');
       response.end();
     }
   });
