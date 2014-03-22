@@ -34,77 +34,74 @@ app.configure( function() {
 });
 
 app.get('/classes/messages', function(request,response) {
-  console.log('inside get request for messages');
-  Message.sync()
-  .success(function() {
-    console.log('message sync success');
-    var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
-
-    newMessage.save().success(function() {
-
-      Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
-        // This function is called back with an array of matches.
-        for (var i = 0; i < msgs.length; i++) {
-          console.log(msgs[i].username + " exists");
-          response.send(msgs[i]);
-        }
-      });
-    });
-  })
-  .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
+  Message.findAll({ where: {username: "Jean Valjean"} })
+  .complete(function(err, msgs) {
+    if(!!err){
+      console.log('An error occurred while searching for user.');
+    } else if (!msgs){
+      console.log('No user with username "Jean Valjean" has been found.');
+    } else {
+      // This function is called back with an array of matches.
+      response.send({results: msgs});
+    }
+  });
 });
 
 app.post('/classes/messages', function(request,response) {
-    // console.log('**********TRYING TO INSERT******');
-    // Message.sync().success(function() {
-    //   var newMessage = Message.build({username: "Jean Valjean", });
-    //   newMessage.save().success(function() {
+  // console.log('inside get request for messages');
+  // Message.sync()
+  // .success(function() {
+  //   console.log('message sync success');
+  //   var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
 
-    //     /* This callback function is called once saving succeeds. */
+  //   newMessage.save().success(function() {
 
-    //     // Retrieve objects from the database:
-    //     Message.findAll({ where: {username: "Jean Valjean"} }).success(function(usrs) {
-    //       // This function is called back with an array of matches.
-    //       for (var i = 0; i < usrs.length; i++) {
-    //         console.log(usrs[i].username + " exists");
-    //       }
-    //     });
-    //   });
-    // });
+  //     Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
+  //       // This function is called back with an array of matches.
+  //       // for (var i = 0; i < msgs.length; i++) {
+  //       //   console.log(msgs[i].username + " exists");
+  //       //   response.send(msgs[i]);
+  //       // }
+  //       response.send({results: msgs});
+  //     });
+  //   });
+  // })
+  // .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
 });
 
 app.get('/classes/room', function(request,response) {
-  console.log('inside get request for rooms');
-  sequelize.sync()
-    .success(function() {
-      console.log('message sync success');
-      var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
-
-      newMessage.save().success(function() {
-        console.log('sending data++++++++');
-
-        Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
-          // This function is called back with an array of matches.
-          for (var i = 0; i < msgs.length; i++) {
-            console.log(msgs[i].username + " exists");
-            response.send(msgs[i]);
-          }
-        });
-      });
-    })
-    .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
+  Message.findAll({ where: {username: "Jean Valjean"} })
+  .complete(function(err, msgs) {
+    if(!!err){
+      console.log('An error occurred while searching for user.');
+    } else if (!msgs){
+      console.log('No user with username "Jean Valjean" has been found.');
+    } else {
+      // This function is called back with an array of matches.
+      response.send({results: msgs});
+    }
+  });
 });
 
 app.post('/classes/room', function(request,response) {
-  // dbConnection.query('INSERT INTO messages SET ?', request.body, function(err, result) {
-  //   if (err) {
-  //     console.log('----Error inserting into messages----', err);
-  //   }
-  //   else {
-  //     console.log('------Inserting into messages');
-  //     response.end();
-  //   }
-  // });
+  // console.log('inside get request for messages');
+  // Message.sync()
+  // .success(function() {
+  //   console.log('message sync success');
+  //   var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
+
+  //   newMessage.save().success(function() {
+
+  //     Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
+  //       // This function is called back with an array of matches.
+  //       for (var i = 0; i < msgs.length; i++) {
+  //         console.log(msgs[i].username + " exists");
+  //         response.send(msgs[i]);
+  //       }
+  //     });
+  //   });
+  // })
+  // .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
 });
 
  var ip = "127.0.0.1";
