@@ -64,7 +64,7 @@ app = {
   sendMessage: function(message) {
     var message = {
       'username': app.currentUserName,
-      'text': message,
+      'message': message,
       'roomname': app.room
     };
     $.ajax({
@@ -97,7 +97,7 @@ app = {
         // data = JSON.parse(data);
         for (var i = 0; i < data.results.length; i++) {
           var username = data.results[i].username;
-          var message = data.results[i].body;
+          var message = data.results[i].message;
           var chatRoom = data.results[i].roomname;
           if (app.room === 'Default' || app.room === chatRoom) {
             if (message !== undefined && username && message && username.charAt(0) !== '<' && message.charAt(0) !== '<' && message.length < 160 && username.length < 160 && message) {

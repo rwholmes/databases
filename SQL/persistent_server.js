@@ -54,12 +54,14 @@ app.get('/classes/messages', function(request,response) {
 app.post('/classes/messages', function(request,response) {
   var clientData = request.body;
     var dataObj = {
-      body: clientData.text,
+      message: clientData.message,
       username: clientData.username,
-      send_time: clientData.createdAt,
+      createdAt: clientData.createdAt,
       roomname: clientData.roomname
     };
     console.log('**********TRYING TO INSERT******');
+    //'SET ?' specifies you are inserting an object whose keys will specify the
+    //attributes that you are setting for that entry
     dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
       if (err) {
         console.log('----Error inserting into messages----', err);
@@ -88,9 +90,9 @@ app.get('/classes/room', function(request,response) {
 app.post('/classes/room', function(request,response) {
   var clientData = request.body;
   var dataObj = {
-    body: clientData.text,
+    message: clientData.message,
     username: clientData.username,
-    send_time: clientData.createdAt,
+    createdAt: clientData.createdAt,
     roomname: clientData.roomname
   };
   dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {

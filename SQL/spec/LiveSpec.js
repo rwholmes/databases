@@ -49,6 +49,8 @@ describe("Persistent Node Chat Server", function() {
                * them up to you. */
               dbConnection.query( queryString, queryArgs,
                 function(err, results, fields) {
+                  console.log('results', results);
+                  console.log('fields', fields);
                   // Should have one result:
                   expect(results.length).toEqual(1);
                   expect(results[0].username).toEqual("Valjean");
