@@ -2,6 +2,12 @@ Sprint: Databases
 
 Team: Rob Holmes and Shane Keller
 
+----------
+Libraries
+----------
+MongoDb:  * See documentation at https://github.com/christkv/node-mongodb-native#readme
+
+
 ----------------------------
 Attribute names
 ----------------------------
@@ -12,6 +18,7 @@ message
 username
 createdAt
 roomname
+
 
 ----------------------------
 Useful commands:
