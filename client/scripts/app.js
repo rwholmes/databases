@@ -92,12 +92,12 @@ app = {
       contentType: 'application/json',
       // data: 'order=-createdAt',
       success: function(data) {
+        console.log('---------------data from getMessages success fn');
         console.log(data);
-        data = JSON.parse(data);
-        console.log(data);
+        // data = JSON.parse(data);
         for (var i = 0; i < data.results.length; i++) {
           var username = data.results[i].username;
-          var message = data.results[i].text;
+          var message = data.results[i].body;
           var chatRoom = data.results[i].roomname;
           if (app.room === 'Default' || app.room === chatRoom) {
             if (message !== undefined && username && message && username.charAt(0) !== '<' && message.charAt(0) !== '<' && message.length < 160 && username.length < 160 && message) {

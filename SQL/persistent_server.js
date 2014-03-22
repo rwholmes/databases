@@ -42,8 +42,11 @@ app.get('/classes/messages', function(request,response) {
   dbConnection.query('SELECT * FROM messages', function(err, data) {
     if (err) { console.log('get failed'); }
     else {
-      console.log('Sending data ', data);
-      response.send(data);
+      // CODE ROB ADDED IN
+      var dataObj = {};
+      dataObj.results = data;
+      console.log('++++++Sending data ', dataObj);
+      response.send(dataObj);
     }
   });
 });
@@ -51,9 +54,9 @@ app.get('/classes/messages', function(request,response) {
 app.post('/classes/messages', function(request,response) {
   console.log(request.body);
   dbConnection.query('INSERT INTO messages', request.body, function(err, result) {
-    if (err) { console.log('Error inserting into messages'); }
+    if (err) { console.log('----Error inserting into messages'); }
     else {
-      console.log('Inserting into messages', result);
+      console.log('------Inserting into messages', result);
       response.end();
     }
   });
@@ -64,18 +67,32 @@ app.get('/classes/room', function(request,response) {
   dbConnection.query('SELECT * FROM messages', function(err, data) {
     if (err) { console.log('get failed'); }
     else {
-      console.log('Sending data ', data);
-      response.send(data);
+      // CODE ROB ADDED IN
+      var dataObj = {};
+      dataObj.results = data;
+      console.log('++++++Sending data ', dataObj);
+      response.send(dataObj);
     }
   });
 });
 
 app.post('/classes/room', function(request,response) {
-  console.log(request.body);
-  dbConnection.query('INSERT INTO messages', request.body, function(err, result) {
-    if (err) { console.log('Error inserting into messages'); }
+  var clientData = request.body;
+  var dataObj = {
+    body: clientData.text,
+    username: clientData.username,
+    send_time: clientData.createdAt,
+    roomname: clientData.roomname
+  };
+  console.log('**********TRYING TO INSERT******');
+  console.log(dataObj);
+  dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
+    if (err) {
+      console.log('----Error inserting into messages----', err);
+      console.log('INSERT INTO messages', dataObj);
+    }
     else {
-      console.log('Inserting into messages', result);
+      console.log('------Inserting into messages', result);
       response.end();
     }
   });
