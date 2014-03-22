@@ -3,7 +3,13 @@ var express = require('express');
 var app = express();
 var Sequelize = require("sequelize");
 
-var sequelize = new Sequelize("chat", "root", "");
+var sequelize = new Sequelize("chat", "root", null);
+
+// {
+//     host: "127.0.0.1",
+//     port: 8080,
+//     dialect: 'mysql'
+//   }
 
 /* first define the data structure by giving property names and datatypes
  * See http://sequelizejs.com for other datatypes you can use besides STRING. */
@@ -28,8 +34,10 @@ app.configure( function() {
 });
 
 app.get('/classes/messages', function(request,response) {
-  console.log('inside get request');
-  Message.sync().success(function() {
+  console.log('inside get request for messages');
+  Message.sync()
+  .success(function() {
+    console.log('message sync success');
     var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
 
     newMessage.save().success(function() {
@@ -42,17 +50,8 @@ app.get('/classes/messages', function(request,response) {
         }
       });
     });
-  });
-  // dbConnection.query('SELECT * FROM messages', function(err, data) {
-  //   if (err) { console.log('get failed'); }
-  //   else {
-  //     // CODE ROB ADDED IN
-  //     var dataObj = {};
-  //     dataObj.results = data;
-  //     console.log('++++++Sending data ');
-  //     response.send(dataObj);
-  //   }
-  // });
+  })
+  .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
 });
 
 app.post('/classes/messages', function(request,response) {
@@ -75,22 +74,25 @@ app.post('/classes/messages', function(request,response) {
 });
 
 app.get('/classes/room', function(request,response) {
-  console.log('inside get request');
-  Message.sync().success(function() {
-    var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
+  console.log('inside get request for rooms');
+  sequelize.sync()
+    .success(function() {
+      console.log('message sync success');
+      var newMessage = Message.build({username: "Jean Valjean", message: "Hey", roomname: "France"});
 
-    newMessage.save().success(function() {
-      console.log('sending data++++++++');
+      newMessage.save().success(function() {
+        console.log('sending data++++++++');
 
-      Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
-        // This function is called back with an array of matches.
-        for (var i = 0; i < msgs.length; i++) {
-          console.log(msgs[i].username + " exists");
-          response.send(msgs[i]);
-        }
+        Message.findAll({ where: {username: "Jean Valjean"} }).success(function(msgs) {
+          // This function is called back with an array of matches.
+          for (var i = 0; i < msgs.length; i++) {
+            console.log(msgs[i].username + " exists");
+            response.send(msgs[i]);
+          }
+        });
       });
-    });
-  });
+    })
+    .error(function(err){ console.log('++++SEQUELIZE ERROR MSG: ', err); });
 });
 
 app.post('/classes/room', function(request,response) {

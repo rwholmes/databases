@@ -92,6 +92,8 @@ app = {
       contentType: 'application/json',
       // data: 'order=-createdAt',
       success: function(data) {
+        var dataObj = {};
+        dataObj.results = data;
         console.log('---------------data from getMessages success fn');
         console.log(data);
         // data = JSON.parse(data);

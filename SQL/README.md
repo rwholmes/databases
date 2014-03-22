@@ -16,6 +16,9 @@ roomname
 ----------------------------
 Useful commands:
 ----------------------------
+---start new server
+mysql server.stop
+mysql server.start
 
 ---run sql as root
 mysql -u root
@@ -36,3 +39,10 @@ ALTER TABLE messages CHANGE send_time createdAt datetime;
 ----show column names
 SHOW COLUMNS FROM messages
 
+-----------------------
+Lessons:
+-----------------------
+--
+Problem: Sequelize cannot create a new database. You must do that manually first. Sequelize can only modify the structure of an existing database.
+
+Takeaway: Don't assume that a framework does anything it doesn't explicitly say it does. We assumed that Sequelize could create a new database. Even if it does, if you're getting a bug, assume documentation is wrong.
