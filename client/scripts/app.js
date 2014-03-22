@@ -69,7 +69,7 @@ app = {
     };
     $.ajax({
       // always use this url
-      url: 'http://127.0.0.1:3000/classes/room',
+      url: 'http://127.0.0.1:8080/classes/room',
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -87,7 +87,7 @@ app = {
   getMessages: function() {
     $.ajax({
       // always use this url
-      url: 'http://127.0.0.1:3000/classes/room',
+      url: 'http://127.0.0.1:8080/classes/room',
       type: 'GET',
       contentType: 'application/json',
       // data: 'order=-createdAt',
@@ -121,6 +121,7 @@ app = {
         }
       },
       error: function (data) {
+        console.log('data', data);
         console.error('chatterbox: Failed to get messages');
       }
     });

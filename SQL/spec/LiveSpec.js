@@ -15,7 +15,9 @@ describe("Persistent Node Chat Server", function() {
       password: "",
       database: "chat"
     });
-    dbConnection.connect();
+    dbConnection.connect(function(err){
+      if(err) { console.log('dbConnection failed'); }
+    });
 
     var tablename = "messages";
 
@@ -31,18 +33,19 @@ describe("Persistent Node Chat Server", function() {
   it("Should insert posted messages to the DB", function(done) {
     // Post a message to the node chat server:
     request({method: "POST",
-             uri: "http://127.0.0.1:8080/classes/room1",
+             uri: "http://127.0.0.1:8080/classes/room",
              form: {username: "Valjean",
                     message: "In mercy's name, three days is all I need."}
             },
             function(error, response, body) {
+              console.log('body', body);
               /* Now if we look in the database, we should find the
                * posted message there. */
 
                //TODO - is the ';' necessary for the query? We'll find out.
                var queryArgs = ["Valjean", "In mercy's name, three days is all I need."];
                var queryString = "SELECT * FROM messages WHERE username = '" + queryArgs[0] + "'"
-               + "AND body = '" + queryArgs[1] + "';";
+               + "AND message = '" + queryArgs[1] + "';";
               /* TODO: Change the above queryString & queryArgs to match your schema design
                * The exact query string and query args to use
                * here depend on the schema you design, so I'll leave
@@ -55,9 +58,6 @@ describe("Persistent Node Chat Server", function() {
                   expect(results.length).toEqual(1);
                   expect(results[0].username).toEqual("Valjean");
                   expect(results[0].message).toEqual("In mercy's name, three days is all I need.");
-                  /* TODO: You will need to change these tests if the
-                   * column names in your schema are different from
-                   * mine! */
 
                   done();
                 });
@@ -68,14 +68,14 @@ describe("Persistent Node Chat Server", function() {
     // Let's insert a message into the db
     // TODO - semicolon necessary?
     var queryArgs = ["Javert", "Men like you can never change!"];
-    var queryString = "INSERT INTO messages (username, body) VALUES ("
+    var queryString = "INSERT INTO messages (username, message) VALUES ("
       + queryArgs[0] + "," + queryArgs[1] +  ");";
 
     dbConnection.query( queryString,
       function(err, results, fields) {
         /* Now query the Node chat server and see if it returns
          * the message we just inserted: */
-        request("http://127.0.0.1:8080/classes/room1",
+        request("http://127.0.0.1:8080/classes/room",
           function(error, response, body) {
             var messageLog = JSON.parse(body);
             expect(messageLog[0].username).toEqual("Javert");

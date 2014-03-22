@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 
 app.configure( function() {
-  app.set("port", process.env.PORT || 3000);
+  app.set("port", process.env.PORT || 8080);
   app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -52,17 +52,10 @@ app.get('/classes/messages', function(request,response) {
 });
 
 app.post('/classes/messages', function(request,response) {
-  var clientData = request.body;
-    var dataObj = {
-      message: clientData.message,
-      username: clientData.username,
-      createdAt: clientData.createdAt,
-      roomname: clientData.roomname
-    };
     console.log('**********TRYING TO INSERT******');
     //'SET ?' specifies you are inserting an object whose keys will specify the
     //attributes that you are setting for that entry
-    dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
+    dbConnection.query('INSERT INTO messages SET ?', request.body, function(err, result) {
       if (err) {
         console.log('----Error inserting into messages----', err);
       }
@@ -88,14 +81,7 @@ app.get('/classes/room', function(request,response) {
 });
 
 app.post('/classes/room', function(request,response) {
-  var clientData = request.body;
-  var dataObj = {
-    message: clientData.message,
-    username: clientData.username,
-    createdAt: clientData.createdAt,
-    roomname: clientData.roomname
-  };
-  dbConnection.query('INSERT INTO messages SET ?', dataObj, function(err, result) {
+  dbConnection.query('INSERT INTO messages SET ?', request.body, function(err, result) {
     if (err) {
       console.log('----Error inserting into messages----', err);
     }
@@ -107,7 +93,7 @@ app.post('/classes/room', function(request,response) {
 });
 
  var ip = "127.0.0.1";
- var port = 3000;
+ var port = 8080;
 
  console.log("Listening on http://" + ip + ":" + port);
  app.listen(port);

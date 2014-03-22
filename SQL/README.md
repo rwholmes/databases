@@ -5,7 +5,8 @@ Team: Rob Holmes and Shane Keller
 ----------------------------
 Attribute names
 ----------------------------
-Same on client, server, and database:
+Same on client, server, and database. Be careful when changing any of
+these names, as code in multiple files is dependent on these names.
 
 message
 username
