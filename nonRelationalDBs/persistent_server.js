@@ -35,69 +35,50 @@ client.open(function(err, p_client) {
       if(err){
         console.log("Err creating collection: ", err);
       } else {
+
+        //need to define 'get' and 'post' functions inside scope of createCollection
+        //so that 'collection' object is within scope of both functions
+        var get = function(url) {
+          app.get('/classes/room', function(request,response) {
+            console.log('inside get request');
+            // Find() returns a "cursor" which can be converted to an array of
+            // documents:
+            collection.find().toArray(function(err, results) {
+              if(err){
+                console.log("Document get failed");
+              }
+
+              var dataObj = {};
+              dataObj.results = results;
+              console.log('++++++Sending data ');
+              response.send(dataObj);
+            });
+          });
+        };
+
+        var post = function(url) {
+          app.post('/classes/room', function(request,response) {
+            console.log('**********TRYING TO INSERT******');
+            var document = request.body;
+
+            // Insert it to the collection:
+            // TODO - docs?
+            collection.insert(document, function(err, docs) {
+              if(err){
+                console.log("Document insert failed");
+              }
+              console.log("Inserted a document.");
+            });
+          });
+        };
+
         console.log("***********Created messages collection");
 
-        app.get('/classes/room', function(request,response) {
-          console.log('inside get request');
-          // Find() returns a "cursor" which can be converted to an array of
-          // documents:
-          collection.find().toArray(function(err, results) {
-            if(err){
-              console.log("Document get failed");
-            }
+        get('/classes/room');
+        get('/classes/messages');
 
-            var dataObj = {};
-            dataObj.results = results;
-            console.log('++++++Sending data ');
-            response.send(dataObj);
-          });
-        });
-
-        app.post('/classes/room', function(request,response) {
-          console.log('**********TRYING TO INSERT******');
-          var document = request.body;
-
-          // Insert it to the collection:
-          // TODO - docs?
-          collection.insert(document, function(err, docs) {
-            if(err){
-              console.log("Document insert failed");
-            }
-
-            console.log("Inserted a document.");
-          });
-        });
-
-        app.get('/classes/messages', function(request,response) {
-          console.log('inside get request');
-          // Find() returns a "cursor" which can be converted to an array of
-          // documents:
-          collection.find().toArray(function(err, results) {
-            if(err){
-              console.log("Document get failed");
-            }
-
-            var dataObj = {};
-            dataObj.results = results;
-            console.log('++++++Sending data ');
-            response.send(dataObj);
-          });
-        });
-
-        app.post('/classes/messages', function(request,response) {
-          console.log('**********TRYING TO INSERT******');
-          var document = request.body;
-
-          // Insert it to the collection:
-          // TODO - docs?
-          collection.insert(document, function(err, docs) {
-            if(err){
-              console.log("Document insert failed");
-            }
-
-            console.log("Inserted a document.");
-          });
-        });
+        post('/classes/room');
+        post('/classes/messages');
       }
     });
   }
