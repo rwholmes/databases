@@ -2,6 +2,13 @@ Sprint: Databases
 
 Team: Rob Holmes and Shane Keller
 
+----------------------------
+Sprint status
+----------------------------
+Finished basic requirements and section 2 extra credit
+Specs difficult to reconcile with our code. None pass, though
+app has all desired functionality.
+
 ----------
 Libraries
 ----------
